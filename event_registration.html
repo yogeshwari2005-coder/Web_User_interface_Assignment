@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Event Registration Portal - Q1</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding: 1.5rem; background:#f8f9fa; }
+    .card { border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.08); }
+    label.required::after { content: "*"; color: #d00; margin-left:4px; }
+    .preview { white-space: pre-wrap; font-family: monospace; }
+    @media (max-width:576px){ .form-row { flex-direction:column; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card p-4">
+      <h3 class="mb-3">Tech Symposium — Registration</h3>
+
+      <!-- Registration Form -->
+      <form id="regForm" novalidate>
+        <div class="mb-3">
+          <label class="required">Full name</label>
+          <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Jane Doe" required>
+        </div>
+
+        <div class="row g-2 form-row">
+          <div class="col-md-6 mb-3">
+            <label class="required">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Phone</label>
+            <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{10}" placeholder="10-digit number">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="required">Choose Event</label>
+          <input list="events" class="form-control" id="event" name="event" placeholder="Start typing..." required>
+          <datalist id="events">
+            <option value="Coding Challenge">
+            <option value="Hackathon">
+            <option value="Robotics Expo">
+            <option value="AI Workshop">
+            <option value="Paper Presentation">
+          </datalist>
+        </div>
+
+        <div class="mb-3">
+          <label>Experience Level</label>
+          <select class="form-select" id="level" name="level">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate" selected>Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label>Additional Notes</label>
+          <textarea class="form-control" id="notes" rows="2"></textarea>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="button" id="previewBtn" class="btn btn-outline-primary">Preview</button>
+          <button type="submit" class="btn btn-primary">Submit Registration</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Preview Registration</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div id="previewArea" class="preview"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Edit</button>
+            <button type="button" id="confirmSubmit" class="btn btn-success">Confirm & Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JS: Bootstrap + jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    $(function(){
+      // Focus/Blur UI hints
+      $('#fullname, #email, #phone, #event').on('focus', function(){ $(this).addClass('border-primary'); });
+      $('#fullname, #email, #phone, #event').on('blur', function(){ $(this).removeClass('border-primary'); });
+
+      // Preview button
+      const previewModal = new bootstrap.Modal($('#previewModal')[0]);
+      $('#previewBtn').on('click', function(){
+        if (!$('#fullname').val() || !$('#email').val() || !$('#event').val()) {
+          alert('Please fill required fields (name, email, event) before preview.');
+          return;
+        }
+        let txt = `Name: ${$('#fullname').val()}\nEmail: ${$('#email').val()}\nPhone: ${$('#phone').val()}\nEvent: ${$('#event').val()}\nLevel: ${$('#level').val()}\nNotes: ${$('#notes').val()}`;
+        $('#previewArea').text(txt);
+        previewModal.show();
+      });
+
+      // Confirm & Submit
+      $('#confirmSubmit').on('click', function(){
+        previewModal.hide();
+        // Simulated submit (here we just show success)
+        alert('Registration submitted successfully!');
+        $('#regForm')[0].reset();
+      });
+
+      // Form validation on submit
+      $('#regForm').on('submit', function(e){
+        e.preventDefault();
+        // html5 validity checks
+        const f = this;
+        if (!f.checkValidity()) {
+          // show native validation UI
+          $(f).addClass('was-validated');
+          alert('Please fill required fields correctly.');
+          return;
+        }
+        // final submit action (ajax or form post)
+        alert('Form submitted (demo).');
+        f.reset();
+      });
+
+      // Basic phone pattern validation on blur
+      $('#phone').on('blur', function(){
+        const val = $(this).val();
+        if(val && !/^\d{10}$/.test(val)) $(this).addClass('is-invalid'); else $(this).removeClass('is-invalid');
+      });
+    });
+  </script>
+</body>
+</html>
