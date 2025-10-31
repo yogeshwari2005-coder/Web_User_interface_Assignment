@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>E-learning Portal - Q4</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding:1.2rem; background:#f7f9fc; }
+    .course-card { transition:transform .25s ease, box-shadow .25s ease; border-radius:10px; overflow:hidden; }
+    .course-card:hover { transform:translateY(-6px); box-shadow: 0 18px 40px rgba(30,30,60,0.08); }
+    .featured { background: linear-gradient(135deg,#06b6d4,#7c3aed); color:#fff; padding:1rem; border-radius:8px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white mb-3 shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">E-Learn</a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#featured">Featured</a></li>
+          <li class="nav-item"><a class="nav-link" href="#courses">Courses</a></li>
+          <li class="nav-item"><a class="nav-link" href="#login">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Featured courses carousel-ish (simple) -->
+  <section id="featured" class="mb-3">
+    <div class="featured d-flex justify-content-between align-items-center">
+      <div>
+        <h3>Featured Course: Modern Web Development</h3>
+        <p class="mb-0">Learn HTML5, CSS3, JavaScript and modern frameworks — beginner to pro.</p>
+      </div>
+      <div>
+        <button id="slideLeft" class="btn btn-light btn-sm me-2">Prev</button>
+        <button id="slideRight" class="btn btn-light btn-sm">Next</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="row g-3">
+    <main class="col-lg-8">
+      <section id="courses">
+        <h5>Popular Courses</h5>
+        <div class="row g-3">
+          <!-- Course cards -->
+          <div class="col-md-6">
+            <div class="card course-card p-3">
+              <h6>Intro to HTML5</h6>
+              <p class="small">Learn structure & semantic tags.</p>
+              <div><button class="btn btn-sm btn-primary moreBtn">More</button></div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card course-card p-3">
+              <h6>CSS3 & Layouts</h6>
+              <p class="small">Box model, flexbox, grid, responsive design.</p>
+              <div><button class="btn btn-sm btn-primary moreBtn">More</button></div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card course-card p-3">
+              <h6>JavaScript Essentials</h6>
+              <p class="small">Events, DOM, async programming.</p>
+              <div><button class="btn btn-sm btn-primary moreBtn">More</button></div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card course-card p-3">
+              <h6>Bootstrap & UI</h6>
+              <p class="small">Components, layout and utilities.</p>
+              <div><button class="btn btn-sm btn-primary moreBtn">More</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="col-lg-4">
+      <section id="login" class="card p-3">
+        <h6 class="mb-2">User Login</h6>
+        <form id="loginForm" novalidate>
+          <div class="mb-2">
+            <label>Username</label>
+            <input id="username" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Password</label>
+            <input id="password" type="password" class="form-control" required>
+          </div>
+          <div id="loginError" class="text-danger small mb-2"></div>
+          <button class="btn btn-primary w-100" type="submit">Login</button>
+        </form>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="mt-4 text-center small text-muted">© 2025 E-Learn</footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    $(function(){
+      // jQuery slide animations for featured courses (simple demo)
+      let featuredIndex = 0;
+      $('#slideRight').on('click', function(){ featuredIndex = (featuredIndex+1) % 3; $('#featured').fadeOut(200, ()=> $('#featured').fadeIn(200)); });
+      $('#slideLeft').on('click', function(){ featuredIndex = (featuredIndex-1+3) % 3; $('#featured').fadeOut(200, ()=> $('#featured').fadeIn(200)); });
+
+      // Login handling with JS event handling & error display
+      $('#loginForm').on('submit', function(e){
+        e.preventDefault();
+        const u = $('#username').val().trim(), p = $('#password').val().trim();
+        if(!u || !p) { $('#loginError').text('Both fields required.'); return; }
+        if (u !== 'student' || p !== 'password') { $('#loginError').text('Invalid credentials (demo).'); return; }
+        $('#loginError').text('');
+        alert('Login successful (demo)');
+        $('#loginForm')[0].reset();
+      });
+
+      // "More" button to show course details (dynamically)
+      $('.moreBtn').on('click', function(){
+        const title = $(this).closest('.card').find('h6').text();
+        // show a modal-like alert (simple)
+        alert(`${title}\n\nDetailed syllabus and enrollment options (demo).`);
+      });
+
+      // Smooth scroll for nav links
+      $('a.nav-link').on('click', function(e){
+        e.preventDefault();
+        const target = $(this).attr('href');
+        $('html,body').animate({scrollTop: $(target).offset().top - 70}, 400);
+      });
+    });
+  </script>
+</body>
+</html>
